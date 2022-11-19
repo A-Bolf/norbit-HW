@@ -5,13 +5,13 @@ const WebSocket = require("ws");
 const wss = new WebSocket.Server({ port: 8080 });
 const clients = new Map();
 let sendinterval;
-let boatStream1 = Fs.createReadStream("norbit_backend/lines/line1.csv").pipe(
+let boatStream1 = Fs.createReadStream("./lines/line1.csv").pipe(
   new AutoDetectDecoderStream({ defaultEncoding: "1255" })
 );
-let boatStream2 = Fs.createReadStream("norbit_backend/lines/line2.csv").pipe(
+let boatStream2 = Fs.createReadStream("./lines/line2.csv").pipe(
   new AutoDetectDecoderStream({ defaultEncoding: "1255" })
 );
-let boatStream3 = Fs.createReadStream("norbit_backend/lines/line3.csv").pipe(
+let boatStream3 = Fs.createReadStream("./lines/line3.csv").pipe(
   new AutoDetectDecoderStream({ defaultEncoding: "1255" })
 );
 let boat1 = [];
@@ -48,24 +48,21 @@ const sendData = (ws, arrs) => {
       emptyArrCount++;
     }
   }
-  if (emptyArrCount === arrs.length) {
-    clearInterval(sendinterval);
-    return;
+  if (
+    JSON.stringify({
+      boat1: arrs[0].shift(),
+      boat2: arrs[1].shift(),
+      boat3: arrs[2].shift(),
+    }) !== "{}"
+  ) {
+    ws.send(
+      JSON.stringify({
+        boat1: arrs[0].shift(),
+        boat2: arrs[1].shift(),
+        boat3: arrs[2].shift(),
+      })
+    );
   }
-  ws.send(
-    JSON.stringify({
-      boat1: arrs[0].shift(),
-      boat2: arrs[1].shift(),
-      boat3: arrs[2].shift(),
-    })
-  );
-  console.log(
-    JSON.stringify({
-      boat1: arrs[0].shift(),
-      boat2: arrs[1].shift(),
-      boat3: arrs[2].shift(),
-    })
-  );
 };
 
 wss.on("connection", (ws) => {
