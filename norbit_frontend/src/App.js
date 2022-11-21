@@ -29,6 +29,9 @@ export const App = () => {
   };
   const handleStopReplay = () => {
     socket.emit("stop replaying");
+    setBoat1Lines([]);
+    setBoat2Lines([]);
+    setBoat3Lines([]);
   };
 
   useEffect(() => {
