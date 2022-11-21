@@ -21,10 +21,10 @@ let isRecording = false;
 let isReplaying = false;
 
 export const pgclient = new Client({
-  user: "hosc",
+  user: "YOUR_PSQL_USERNAME",
   host: "localhost",
   database: "norbit",
-  password: "Porcica1",
+  password: "YOUR_PASSWORD",
   port: 5432,
 });
 pgclient.connect(function (err) {
